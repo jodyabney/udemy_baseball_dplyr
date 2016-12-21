@@ -120,7 +120,7 @@ bdat <- inner_join(Batting, Master, by=c("playerID")) %>%
   select(first_name, last_name, career_HR)
 bdat
 
-#Section 5, Lecture 1
+#Section 5, Lecture 2
 bdat <- Teams %>%
   #filter(park=="Petco Park") %>%
   select(teamID, yearID, park)
@@ -133,13 +133,21 @@ bdat <- inner_join(bdat, Batting, by=c("teamID", "yearID")) %>%
   select(playerID, teamID, yearID, park)
 bdat
 
-# bdat <- Batting %>%
-#   filter(teamID=="SDN" & yearID > 2004 & yearID <= 2013) %>%
-#   select(playerID)
-# bdat
-
 bdat <- inner_join(bdat, Master, by=c("playerID")) %>%
   group_by(playerID) %>%
   summarise(first_name=nameFirst[1], last_name=nameLast[1]) %>%
   select(first_name, last_name)
 bdat
+
+# Section 5, Lecture 4
+bdat <- Master %>%
+  filter(nameFirst=="Bob") %>%
+  select(playerID, nameFirst, nameLast)
+bdat
+
+bdat <- inner_join(bdat, Salaries) %>%
+  group_by(playerID, nameFirst, nameLast) %>%
+  summarise(career_avg_salary=mean(salary)) %>%
+  filter(career_avg_salary > 1000000)
+bdat
+
