@@ -140,14 +140,14 @@ bdat <- inner_join(bdat, Master, by=c("playerID")) %>%
 bdat
 
 # Section 5, Lecture 4
-bdat <- Master %>%
-  filter(nameFirst=="Bob") %>%
-  select(playerID, nameFirst, nameLast)
-bdat
-
-bdat <- inner_join(bdat, Salaries) %>%
-  group_by(playerID, nameFirst, nameLast) %>%
+bdat <- Salaries %>%
+  group_by(playerID) %>%
   summarise(career_avg_salary=mean(salary)) %>%
   filter(career_avg_salary > 1000000)
+bdat
+
+bdat <- inner_join(bdat, Master) %>%
+  filter(nameFirst=="Bob") %>%
+  select(nameFirst, nameLast)
 bdat
 
