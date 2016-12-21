@@ -60,4 +60,66 @@ bdat <- Batting %>%
   arrange(desc(career_batting_avg))
 head(bdat)
 
+# Section 4, Lecture 18 Inner Join
+bdat <- inner_join(Batting, Master, by=c("playerID")) %>%
+  filter(playerID=="ruthba01" | playerID=="aaronha01")
+bdat
+
+bdat <- Batting %>%
+  filter(playerID=="ruthba01" | playerID=="aaronha01")
+bdat <- inner_join(bdat, Master, by=c("playerID"))
+bdat
+
+# Section 4, Lecture 19 A query with inner join
+bdat <- Batting %>%
+  select(playerID, teamID, yearID, HR)
+head(bdat)
+
+bdat <- inner_join(bdat, Master, by=c("playerID")) %>%
+  select(nameFirst, nameLast, teamID, yearID, HR)
+head(bdat)
+
+# Section 4, Lecture 21 inner join on multiple fields
+bdat <- Batting %>%
+  filter(playerID=="ruthba01") %>%
+  select(playerID, teamID, yearID, HR)
+bdat
+
+bdat <- inner_join(bdat, Teams, by=c("teamID", "yearID")) %>%
+  select(playerID, name, yearID, player_HR=HR.x)
+bdat
+
+# Sectoin 4, Lecture 23 inner join on three tables
+bdat <- Batting %>%
+  filter(playerID=="ruthba01") %>%
+  select(playerID, teamID, yearID, HR)
+bdat
+
+bdat <- inner_join(bdat, Master, by=c("playerID")) %>%
+  select(nameFirst, nameLast, teamID, yearID, HR)
+bdat
+
+bdat <- inner_join(bdat, Teams, by=c("teamID", "yearID")) %>%
+  select(nameFirst, nameLast, name, yearID, player_HR=HR.x)
+bdat
+
+# Section 4, Lecture 25 
+bdat <- Batting %>%
+  group_by(playerID) %>%
+  summarise(career_HR=sum(HR, na.rm=TRUE))
+bdat
+
+bdat <- inner_join(bdat, Master, by=c("playerID")) %>%
+  select(nameFirst, nameLast, career_HR)
+bdat
+
+# with one query
+bdat <- inner_join(Batting, Master, by=c("playerID")) %>%
+  group_by(playerID) %>%
+  summarise(first_name=nameFirst[1], last_name=nameLast[1], career_HR=sum(HR, na.rm=TRUE)) %>%
+  select(first_name, last_name, career_HR)
+bdat
+
+
+
 
